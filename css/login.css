@@ -1,0 +1,61 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*-------------------------------------------------------------------------------------------*/
+/* login */
+#login_box {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	width:26em;
+	height:16em;
+	margin-top: -8em; /*set to a negative number 1/2 of your height*/
+	margin-left: -13em; /*set to a negative number 1/2 of your width*/
+	border: 4px solid #19049a;
+}
+
+#header{
+	background:url(images/bawor.jpg) no-repeat center;
+}
+
+#login_form{
+	padding:15px;
+}
+
+#login_form p label{
+	display:block;
+	float:left;
+	width:150px;
+}
+
+#login_form p{
+	margin-bottom:10px;
+}
+
+#submit{
+	padding:0 4px;
+	border:#666 solid 2px;
+	margin-left:150px;
+}
+
+#login_box .field_error, #login_box #message{
+	font-size:12px;
+	color:#F00;
+}
+
+#login_box #form_error_message{
+	margin-bottom:20px;
+}
+
+#login_box .field_error{
+	clear:both;
+	margin-left:80px;
+}
+
+.form_field{
+	border:#666 solid 1px;
+}
+
+.form_field:focus{
+	background-color:#F9E9A9;
+}
