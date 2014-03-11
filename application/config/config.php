@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/lab-fabio/';
+$config['base_url']	= 'http://labfabio.azurewebsites.net/';
 
 /*
 |--------------------------------------------------------------------------
