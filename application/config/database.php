@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'labfabiodb';
+$db['default']['hostname'] = 'ap-cdbr-azure-east-b.cloudapp.net';
+$db['default']['username'] = 'be9f36374623f4';
+$db['default']['password'] = '0a6e0cd0';
+$db['default']['database'] = 'cdb_4f4d4393a9';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
