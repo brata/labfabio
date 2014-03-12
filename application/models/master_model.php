@@ -8,7 +8,7 @@ class Master_model extends CI_Model {
 	/**
 	 * Constructor
 	 */
-	function Master_model()
+	function master_model()
 	{
 		parent::__Construct();
 	}
@@ -20,6 +20,36 @@ class Master_model extends CI_Model {
 	/**
 	 * Proses Master Data
 	 */
+	 
+	function get_all_mahasiswa($limit, $offset)
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_pengambil');
+		$this->db->where('idjenispengambil','2');
+		$this->db->limit($limit, $offset);
+		$this->db->order_by('idpengambil', 'asc');
+		return $this->db->get()->result();
+	}
+	 
+	function count_all_mahasiswa()
+	{
+		return $this->db->count_all('vw_tbl_mahasiswa');
+	} 
+	
+	function get_all_dosen($limit, $offset)
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_pengambil');
+		$this->db->where('idjenispengambil','1');
+		$this->db->limit($limit, $offset);
+		$this->db->order_by('idpengambil', 'asc');
+		return $this->db->get()->result();
+	}
+	 
+	function count_all_dosen()
+	{
+		return $this->db->count_all('vw_tbl_dosen');
+	} 
 	 
 	 function getStsKirim(){
 		$result = array();
