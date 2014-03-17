@@ -187,13 +187,13 @@ class MasterMahasiswa extends CI_Controller {
 		redirect('anggota');
 	}
 	
-	function select_desa(){
+/* 	function select_desa(){
     	if('IS_AJAX') {
         $data['option_desa'] = $this->Master_model->getDesaList();		
 		$this->load->view('master/desadd',$data);
             }
 		
-	}
+	} */
 	
 //	function tampilkan_subkategori()
 //	{
@@ -206,41 +206,43 @@ class MasterMahasiswa extends CI_Controller {
 	function add()
 	{		
 		$data['title'] 			= $this->title;
-		$data['h2_title'] 		= 'Anggota > Tambah Data';
-		$data['main_view'] 		= 'master/anggota_form';
+		$data['h2_title'] 		= 'Data Mahasiswa > Tambah Data';
+		$data['main_view'] 		= 'master/mastermahasiswa_form';
 		$data['left_view']		= 'menumaster.php';
-		$data['form_action']	= site_url('anggota/add_process');
-		$data['link'] 			= array('link_back' => anchor('anggota','kembali', array('class' => 'back'))
+		$data['form_action']	= site_url('mastermahasiswa/add_process');
+		$data['link'] 			= array('link_back' => anchor('mastermahasiswa','kembali', array('class' => 'back'))
 										);
 
-		// data Kecamatan untuk dropdown menu
-		//$data['kategori'] = $this->db->get('kecamatan');		
-		$data['option_kecamatan'] = $this->Master_model->getKecamatanList();
+		$data['user'] = $this->session->userdata('username');
 		
-		$data['option_desa']= $this->Master_model->getDesaList();
+		// ============= Awal Blok Info ada di setiap controller =============
+		$dataflash = $this->Info_model->get_flashinfo();
+		$dataflashbaris = $dataflash->row();		
+		$data['flashinfo'] = $dataflashbaris->info;
+		// ============= Akhir Blok Info ada di setiap controller =============	
 					
 		// data Jenis Kelamin untuk dropdown menu
 		$jk = $this->Master_model->get_jk()->result();
 		
 		foreach($jk as $row)
 		{
-			$data['options_jk'][$row->Kodejk] = $row->NamaJK;
+			$data['options_jk'][$row->idjeniskelamin] = $row->jeniskelamin;
 		}
 		
-		// data Status untuk dropdown menu
-		$sts = $this->Master_model->get_sts()->result();
+		// data Jurusan
+		$jurusan = $this->Master_model->get_jurusan()->result();
 		
-		foreach($sts as $row)
+		foreach($jurusan as $row)
 		{
-			$data['options_status'][$row->kodestatus] = $row->deskripsi;
+			$data['options_jurusan'][$row->idjurusan] = $row->jurusan;
 		}
 		
-		// data Agama untuk dropdown menu
+		// data agama
 		$agama = $this->Master_model->get_agama()->result();
 		
 		foreach($agama as $row)
 		{
-			$data['options_agama'][$row->kodeagama] = $row->deskripsi;
+			$data['options_agama'][$row->idagama] = $row->agama;
 		}
 		
 		$this->load->view('template', $data);
@@ -249,65 +251,76 @@ class MasterMahasiswa extends CI_Controller {
 	function add_process()
 	{		
 		$data['title'] 			= $this->title;
-		$data['h2_title'] 		= 'Anggota > Tambah Data';
-		$data['main_view'] 		= 'master/anggota_form';
+		$data['h2_title'] 		= 'Data Mahasiswa > Tambah Data';
+		$data['main_view'] 		= 'master/mastermahasiswa_form';
 		$data['left_view']		= 'menumaster.php';
-		$data['form_action']	= site_url('anggota/add_process');
-		$data['link'] 			= array('link_back' => anchor('anggota','kembali', array('class' => 'back'))
+		$data['form_action']	= site_url('mastermahasiswa/add_process');
+		$data['link'] 			= array('link_back' => anchor('mastermahasiswa','kembali', array('class' => 'back'))
 										);
 										
-		// data Kecamatan untuk dropdown menu
-		$data['option_kecamatan'] = $this->Master_model->getKecamatanList();
-										
+		$data['user'] = $this->session->userdata('username');
+		
+		// ============= Awal Blok Info ada di setiap controller =============
+		$dataflash = $this->Info_model->get_flashinfo();
+		$dataflashbaris = $dataflash->row();		
+		$data['flashinfo'] = $dataflashbaris->info;
+		// ============= Akhir Blok Info ada di setiap controller =============	
+					
 		// data Jenis Kelamin untuk dropdown menu
 		$jk = $this->Master_model->get_jk()->result();
 		
 		foreach($jk as $row)
 		{
-			$data['options_jk'][$row->Kodejk] = $row->NamaJK;
+			$data['options_jk'][$row->idjeniskelamin] = $row->jeniskelamin;
 		}
 		
-		// data Status untuk dropdown menu
-		$sts = $this->Master_model->get_sts()->result();
+		// data Jurusan
+		$jurusan = $this->Master_model->get_jurusan()->result();
 		
-		foreach($sts as $row)
+		foreach($jurusan as $row)
 		{
-			$data['options_status'][$row->kodestatus] = $row->deskripsi;
+			$data['options_jurusan'][$row->idjurusan] = $row->jurusan;
 		}
 		
-		// data Agama untuk dropdown menu
+		// data agama
 		$agama = $this->Master_model->get_agama()->result();
 		
 		foreach($agama as $row)
 		{
-			$data['options_agama'][$row->kodeagama] = $row->deskripsi;
+			$data['options_agama'][$row->idagama] = $row->agama;
 		}
 		
 		// Set validation rules
-		$this->form_validation->set_rules('noanggota', 'No Anggota', 'required|exact_length[4]|numeric|callback_valid_noanggota');
-		$this->form_validation->set_rules('nama', 'Nama', 'required|max_length[50]');
+		$this->form_validation->set_rules('idpengambil', 'N I M', 'required');
+		$this->form_validation->set_rules('nama', 'Nama', 'required');
 		$this->form_validation->set_rules('alamat', 'Alamat', 'required');
+		$this->form_validation->set_rules('nohp', 'No. Handphone', 'required');
+		$this->form_validation->set_rules('email', 'E-Mail', 'required');
+		$this->form_validation->set_rules('tempatlahir', 'Tempat Lahir', 'required');
+//		$this->form_validation->set_rules('tgllahir', 'Tanggal Lahir', 'required');
 		$this->form_validation->set_rules('id_jk', 'Jenis Kelamin', 'required');
 		$this->form_validation->set_rules('id_agama', 'Agama', 'required');
-		$this->form_validation->set_rules('tglmasuk', 'Tanggal Masuk', 'required');
-		$this->form_validation->set_rules('id_status', 'Status', 'required');
+		$this->form_validation->set_rules('idjurusan', 'Jurusan', 'required');		
 		
 		if ($this->form_validation->run() == TRUE)
 		{
 			// save data
-			$anggota = array('noanggota' 		=> $this->input->post('noanggota'),
+			$pengambil = array('idpengambil' 		=> $this->input->post('idpengambil'),
 							'nama'		=> $this->input->post('nama'),
-							'alamat'	=> $this->input->post('alamat'),
-							'id' 		=> $this->input->post('desa_id'),
-							'jeniskelamin'		=> $this->input->post('id_jk'),
-							'kdagama'	=> $this->input->post('id_agama'),
-							'tglmasuk' 		=> $this->input->post('tglmasuk'),
-							'statusanggota'		=> $this->input->post('id_status')
+							'tempatlahir'	=> $this->input->post('tempatlahir'),
+							'tgllahir' 		=> $this->input->post('tgllahir'),
+							'alamat'		=> $this->input->post('alamat'),
+							'nohp'	=> $this->input->post('nohp'),
+							'email'		=> $this->input->post('email'),
+							'idjenispengambil'	=> "2",
+							'idjeniskelamin' 		=> $this->input->post('id_jk'),
+							'idagama' 		=> $this->input->post('id_agama'),
+							'idjurusan'		=> $this->input->post('idjurusan')
 						);
-			$this->Master_model->add($anggota);
+			$this->Master_model->addpengambil($pengambil);
 			
 			$this->session->set_flashdata('message', 'Satu data siswa berhasil disimpan!');
-			redirect('anggota/get_all');
+			redirect('mastermahasiswa/get_all');
 		}
 		else
 		{	

@@ -4,11 +4,11 @@
  *
  * @author	Awan Pribadi Basuki <awan_pribadi@yahoo.com>
  */
-class MasterDosen extends CI_Controller {
+class MasterBahanKimia extends CI_Controller {
 	/**
 	 * Constructor
 	 */
-	function masterdosen()
+	function masterbahankimia()
 	{
 		parent::__Construct();
 		$this->load->model('Master_model', '', TRUE);
@@ -18,7 +18,7 @@ class MasterDosen extends CI_Controller {
 	}
 
 	var $limit = 10;
-	var $title = 'Dosen';
+	var $title = 'Bahan Kimia';
 	
 	/**
 	 * Memeriksa user state, jika dalam keadaan login akan menjalankan fungsi main()
@@ -42,10 +42,10 @@ class MasterDosen extends CI_Controller {
 	function get_all()
 	{
 		$data['title'] = $this->title;
-		$data['h2_title'] = 'Data Dosen';
-		$data['main_view'] = 'master/masterdosen_view';
+		$data['h2_title'] = 'Data Bahan Kimia';
+		$data['main_view'] = 'master/masterbahankimia_view';
 		$data['left_view'] = 'menumaster.php';
-		$data['form_action'] = site_url('masterdosen/get_dosen_by_idnama');
+		$data['form_action'] = site_url('masterbahankimia/get_bahankimia_by_idnama');
 		
 		$data['user'] = $this->session->userdata('username');
 		
@@ -60,8 +60,8 @@ class MasterDosen extends CI_Controller {
 		$offset = $this->uri->segment($uri_segment);
 		
 		// Load data
-		$dosen = $this->Master_model->get_all_dosen($this->limit, $offset);
-		$num_rows = $this->Master_model->count_all_dosen();
+		$bahankimia = $this->Master_model->get_all_bahankimia($this->limit, $offset);
+		$num_rows = $this->Master_model->count_all_bahankimia();
 
 		//echo $num_rows;
 		// Jumlah data anggota
@@ -73,7 +73,7 @@ class MasterDosen extends CI_Controller {
 		if ($num_rows > 0)
 		{
 			// Generate pagination			
-			$config['base_url'] = site_url('masterdosen/get_all');
+			$config['base_url'] = site_url('masterbahankimia/get_all');
 			$config['total_rows'] = $num_rows;
 			$config['per_page'] = $this->limit;
 			$config['uri_segment'] = $uri_segment;
@@ -89,17 +89,17 @@ class MasterDosen extends CI_Controller {
 				
 				// set table header
 				$this->table->set_empty("&nbsp;");
-				$this->table->set_heading('N I P','NAMA','ALAMAT','NO HP','E-MAIL','AKSI');
+				$this->table->set_heading('KODE BAHAN KIMIA','NAMA BAHAN','RUMUS KIMIA','PACKING','STOCK KRITIS','AKSI');
 								
-				foreach ($dosen as $row)
+				foreach ($bahankimia as $row)
 				{
-					$this->table->add_row($row->idpengambil, $row->nama, $row->alamat,$row->nohp, $row->email,anchor('masterdosen/update/'.$row->idpengambil,'update',array('class' => 'update')).' '.
-										anchor('masterdosen/delete/'.$row->idpengambil,'hapus',array('class'=> 'delete','onclick'=>"return confirm('Anda yakin akan menghapus data ini?')"))
+					$this->table->add_row($row->idbahankimia, $row->namabahankimia, $row->rumusbahankimia,$row->packing, $row->stockkritis,anchor('masterbahankimia/update/'.$row->idbahankimia,'update',array('class' => 'update')).' '.
+										anchor('masterbahankimia/delete/'.$row->idbahankimia,'hapus',array('class'=> 'delete','onclick'=>"return confirm('Anda yakin akan menghapus data ini?')"))
 					);
 				}
 									
 				$data['table'] = $this->table->generate();
-				$data['link'] = array('link_add' => anchor('masterdosen/add/','Tambah Data', array('class' => 'add')));
+				$data['link'] = array('link_add' => anchor('masterbahankimia/add/','Tambah Data', array('class' => 'add')));
 				$this->load->view('template', $data);
 			}
 		}
@@ -107,23 +107,23 @@ class MasterDosen extends CI_Controller {
 	/**
 	 * Menampilkan halaman utama rekap absen
 	 */
-	function get_dosen_by_idnama($kriteria = '')
+	function get_bahankimia_by_idnama($kriteria = '')
 	{
 		$data['title'] = $this->title;
-		$data['h2_title'] = 'Data Dosen';
-		$data['main_view'] = 'master/masterdosen_view';
+		$data['h2_title'] = 'Data Bahan Kimia';
+		$data['main_view'] = 'master/masterbahankimia_view';
 		$data['left_view'] = 'menumaster.php';
-		$data['form_action'] = site_url('masterdosen/get_dosen_by_idnama');
+		$data['form_action'] = site_url('masterbahankimia/get_bahankimia_by_idnama');
 		
 		//tangkap kriteria
 		$kriteria = $this->input->post('kriteria');
 		//echo $kriteria;
 		
 		// Load data
-		$dosen = $this->Master_model->get_dosen_by_idnama($kriteria);
-		$dosenhasil = $dosen->result();
-		$num_rows = $dosen->num_rows();
-		$dosenbaris = $dosen->row();
+		$bahankimia = $this->Master_model->get_bahankimia_by_idnama($kriteria);
+		$bahankimiahasil = $bahankimia->result();
+		$num_rows = $bahankimia->num_rows();
+		$bahankimiabaris = $bahankimia->row();
 		//echo $anggotabaris->Nama;
 		//echo $num_rows;
 		
@@ -140,11 +140,11 @@ class MasterDosen extends CI_Controller {
 				
 				// set table header
 				$this->table->set_empty("&nbsp;");
-				$this->table->set_heading('N I P','NAMA','ALAMAT','NO HP','E-MAIL','AKSI');
+				$this->table->set_heading('KODE BAHAN KIMIA','NAMA BAHAN','RUMUS KIMIA','PACKING','STOCK KRITIS','AKSI');
 								
 	//			foreach ($anggota as $row)
 	//			{
-					$this->table->add_row($dosenbaris->idpengambil, $dosenbaris->nama, $dosenbaris->alamat, $dosenbaris->nohp, $dosenbaris->email, anchor('masterdosen/update/'.$dosenbaris->idpengambil,'update',array('class' => 'update')).' '. anchor('masterdosen/delete/'.$dosenbaris->idpengambil,'hapus',array('class'=> 'delete','onclick'=>"return confirm('Anda yakin akan menghapus data ini?')")));
+					$this->table->add_row($bahankimiabaris->idbahankimia, $bahankimiabaris->namabahankimia, $bahankimiabaris->rumusbahankimia, $bahankimiabaris->packing, $bahankimiabaris->stockkritis, anchor('masterbahankimia/update/'.$bahankimiabaris->idbahankimia,'update',array('class' => 'update')).' '. anchor('masterbahankimia/delete/'.$bahankimiabaris->idbahankimia,'hapus',array('class'=> 'delete','onclick'=>"return confirm('Anda yakin akan menghapus data ini?')")));
 //			}
 				
 				$data['table'] = $this->table->generate();
@@ -163,28 +163,28 @@ class MasterDosen extends CI_Controller {
 				$this->table->set_empty("&nbsp;");
 				$this->table->set_heading('N I P','NAMA','ALAMAT','NO HP','E-MAIL','AKSI');
 								
-				foreach ($dosenhasil as $row)
+				foreach ($bahankimiahasil as $row)
 				{
-					$this->table->add_row($row->idpengambil, $row->nama, $row->alamat, $row->nohp, $row->email, anchor('masterdosen/update/'.$row->idpengambil,'update',array('class' => 'update')).' '. anchor('masterdosen/delete/'.$row->idpengambil,'hapus',array('class'=> 'delete','onclick'=>"return confirm('Anda yakin akan menghapus data ini?')")));
+					$this->table->add_row($row->idbahankimia, $row->namabahankimia, $row->rumusbahankimia,$row->packing, $row->stockkritis,anchor('masterbahankimia/update/'.$row->idbahankimia,'update',array('class' => 'update')).' '.
+										anchor('masterbahankimia/delete/'.$row->idbahankimia,'hapus',array('class'=> 'delete','onclick'=>"return confirm('Anda yakin akan menghapus data ini?')")));
 				}
-				
 				$data['table'] = $this->table->generate();
 			}
 		}
 		else
 		{
 			$this->session->set_flashdata('message', 'Data tidak ditemukan!');
-			redirect('masterdosen');	
+			redirect('masterbahankimia');	
 		}
 		$this->load->view('template', $data);
 	}
 		
-	function delete($nip)
+	function delete($idbahankimia)
 	{
-		$this->Master_model->delete($nip);
+		$this->Master_model->delete($idbahankimia);
 		$this->session->set_flashdata('message', '1 data anggota berhasil dihapus');
 		
-		redirect('anggota');
+		redirect('masterbahankimia');
 	}
 	
 /* 	function select_desa(){
@@ -206,11 +206,11 @@ class MasterDosen extends CI_Controller {
 	function add()
 	{		
 		$data['title'] 			= $this->title;
-		$data['h2_title'] 		= 'Data Dosen > Tambah Data';
-		$data['main_view'] 		= 'master/masterdosen_form';
+		$data['h2_title'] 		= 'Data Bahan Kimia > Tambah Data';
+		$data['main_view'] 		= 'master/masterbahankimia_form';
 		$data['left_view']		= 'menumaster.php';
-		$data['form_action']	= site_url('masterdosen/add_process');
-		$data['link'] 			= array('link_back' => anchor('masterdosen','kembali', array('class' => 'back'))
+		$data['form_action']	= site_url('masterbahankimia/add_process');
+		$data['link'] 			= array('link_back' => anchor('masterbahankimia','kembali', array('class' => 'back'))
 										);
 
 		$data['user'] = $this->session->userdata('username');
@@ -221,28 +221,20 @@ class MasterDosen extends CI_Controller {
 		$data['flashinfo'] = $dataflashbaris->info;
 		// ============= Akhir Blok Info ada di setiap controller =============	
 					
-		// data Jenis Kelamin untuk dropdown menu
-		$jk = $this->Master_model->get_jk()->result();
+		// data Jenis Bahan Kimia untuk dropdown menu
+		$jenisbahankimia = $this->Master_model->get_jenisbahankimia()->result();
 		
-		foreach($jk as $row)
+		foreach($jenisbahankimia as $row)
 		{
-			$data['options_jk'][$row->idjeniskelamin] = $row->jeniskelamin;
+			$data['options_jenisbahankimia'][$row->idjenisbahankimia] = $row->jenisbahankimia;
 		}
 		
-		// data Jurusan
-		$jurusan = $this->Master_model->get_jurusan()->result();
+		// data Satuan untuk dropdown
+		$satuan = $this->Master_model->get_satuan()->result();
 		
-		foreach($jurusan as $row)
+		foreach($satuan as $row)
 		{
-			$data['options_jurusan'][$row->idjurusan] = $row->jurusan;
-		}
-		
-		// data agama
-		$agama = $this->Master_model->get_agama()->result();
-		
-		foreach($agama as $row)
-		{
-			$data['options_agama'][$row->idagama] = $row->agama;
+			$data['options_satuan'][$row->idsatuan] = $row->namasatuan;
 		}
 		
 		$this->load->view('template', $data);
@@ -251,13 +243,13 @@ class MasterDosen extends CI_Controller {
 	function add_process()
 	{		
 		$data['title'] 			= $this->title;
-		$data['h2_title'] 		= 'Data Dosen > Tambah Data';
-		$data['main_view'] 		= 'masterdosen/masterdosen_form';
+		$data['h2_title'] 		= 'Data Bahan Kimia > Tambah Data';
+		$data['main_view'] 		= 'master/masterbahankimia_form';
 		$data['left_view']		= 'menumaster.php';
-		$data['form_action']	= site_url('masterdosen/add_process');
-		$data['link'] 			= array('link_back' => anchor('masterdosen','kembali', array('class' => 'back'))
+		$data['form_action']	= site_url('masterbahankimia/add_process');
+		$data['link'] 			= array('link_back' => anchor('masterbahankimia','kembali', array('class' => 'back'))
 										);
-		
+										
 		$data['user'] = $this->session->userdata('username');
 		
 		// ============= Awal Blok Info ada di setiap controller =============
@@ -266,61 +258,52 @@ class MasterDosen extends CI_Controller {
 		$data['flashinfo'] = $dataflashbaris->info;
 		// ============= Akhir Blok Info ada di setiap controller =============	
 					
-		// data Jenis Kelamin untuk dropdown menu
-		$jk = $this->Master_model->get_jk()->result();
+		// data Jenis Bahan Kimia untuk dropdown menu
+		$jenisbahankimia = $this->Master_model->get_jenisbahankimia()->result();
 		
-		foreach($jk as $row)
+		foreach($jenisbahankimia as $row)
 		{
-			$data['options_jk'][$row->idjeniskelamin] = $row->jeniskelamin;
+			$data['options_jenisbahankimia'][$row->idjenisbahankimia] = $row->jenisbahankimia;
 		}
 		
-		// data Jurusan
-		$jurusan = $this->Master_model->get_jurusan()->result();
+		// data Satuan untuk dropdown
+		$satuan = $this->Master_model->get_satuan()->result();
 		
-		foreach($jurusan as $row)
+		foreach($satuan as $row)
 		{
-			$data['options_jurusan'][$row->idjurusan] = $row->jurusan;
-		}
-		
-		// data agama
-		$agama = $this->Master_model->get_agama()->result();
-		
-		foreach($agama as $row)
-		{
-			$data['options_agama'][$row->idagama] = $row->agama;
+			$data['options_satuan'][$row->idsatuan] = $row->namasatuan;
 		}
 		
 		// Set validation rules
-		$this->form_validation->set_rules('idpengambil', 'N I P', 'required');
-		$this->form_validation->set_rules('nama', 'Nama', 'required');
-		$this->form_validation->set_rules('alamat', 'Alamat', 'required');
-		$this->form_validation->set_rules('nohp', 'No. Handphone', 'required');
-		$this->form_validation->set_rules('email', 'E-Mail', 'required');
-		$this->form_validation->set_rules('tempatlahir', 'Tempat Lahir', 'required');
-		$this->form_validation->set_rules('tgllahir', 'Tanggal Lahir', 'required');
-		$this->form_validation->set_rules('id_jk', 'Jenis Kelamin', 'required');
-		$this->form_validation->set_rules('id_agama', 'Agama', 'required');
-		$this->form_validation->set_rules('idjurusan', 'Jurusan', 'required');		
+		$this->form_validation->set_rules('idbahankimia', 'Kode Bahan Kimia', 'required');
+		$this->form_validation->set_rules('namabahankimia', 'Nama Bahan Kimia', 'required');
+		$this->form_validation->set_rules('namalatinbahankimia', 'Nama Latin Bahan Kimia', 'required');
+		$this->form_validation->set_rules('rumusbahankimia', 'Rumus Bahan Kimia', 'required');
+		$this->form_validation->set_rules('merkbahankimia', 'Merk Bahan Kimia', 'required');
+		$this->form_validation->set_rules('packing', 'Packing', 'required');
+		$this->form_validation->set_rules('spesifikasi', 'Spesifikasi', 'required');
+		$this->form_validation->set_rules('id_jenisbahankimia', 'Jenis Bahan Kimia', 'required');
+		$this->form_validation->set_rules('id_satuan', 'Satuan', 'required');
+		$this->form_validation->set_rules('stockkritis', 'Stock Kritis', 'required');
 		
 		if ($this->form_validation->run() == TRUE)
 		{
 			// save data
-			$pengambil = array('idpengambil' 		=> $this->input->post('idpengambil'),
-							'nama'		=> $this->input->post('nama'),
-							'tempatlahir'	=> $this->input->post('tempatlahir'),
-							'tgllahir' 		=> $this->input->post('tgllahir'),
-							'alamat'		=> $this->input->post('alamat'),
-							'nohp'	=> $this->input->post('nohp'),
-							'email'		=> $this->input->post('email'),
-							'idjenispengambil'	=> "1",
-							'idjeniskelamin' 		=> $this->input->post('id_jk'),
-							'idagama' 		=> $this->input->post('id_agama'),
-							'idjurusan'		=> $this->input->post('idjurusan')
+			$bahankimia = array('idbahankimia' 		=> $this->input->post('idbahankimia'),
+							'namabahankimia'		=> $this->input->post('namabahankimia'),
+							'namalatinbahankimia'	=> $this->input->post('namalatinbahankimia'),
+							'rumusbahankimia' 		=> $this->input->post('rumusbahankimia'),
+							'merkbahankimia'		=> $this->input->post('merkbahankimia'),
+							'packing'	=> $this->input->post('packing'),
+							'spesifikasi'	=> $this->input->post('spesifikasi'),
+							'idjenisbahankimia' 		=> $this->input->post('id_jenisbahankimia'),
+							'idsatuan'		=> $this->input->post('id_satuan'),
+							'stockkritis' 		=> $this->input->post('stockkritis')
 						);
-			$this->Master_model->addpengambil($pengambil);
+			$this->Master_model->addbahankimia($bahankimia);
 			
-			$this->session->set_flashdata('message', 'Satu data siswa berhasil disimpan!');
-			redirect('masterdosen/get_all');
+			$this->session->set_flashdata('message', 'Satu data bahan kimia berhasil disimpan!');
+			redirect('masterbahankimia/get_all');
 		}
 		else
 		{	
