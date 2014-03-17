@@ -48,7 +48,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-/* $db['default']['hostname'] = 'ap-cdbr-azure-east-b.cloudapp.net';
+$db['default']['hostname'] = 'ap-cdbr-azure-east-b.cloudapp.net';
 $db['default']['username'] = 'be9f36374623f4';
 $db['default']['password'] = '0a6e0cd0';
 $db['default']['database'] = 'cdb_4f4d4393a9';
@@ -62,8 +62,9 @@ $db['default']['char_set'] = 'utf8';
 $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
-$db['default']['stricton'] = FALSE; */
+$db['default']['stricton'] = FALSE; 
 
+/*
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
 $db['default']['password'] = '';
@@ -79,7 +80,7 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
-
+*/
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */
